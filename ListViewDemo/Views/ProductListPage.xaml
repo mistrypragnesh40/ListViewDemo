@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodels="clr-namespace:ListViewDemo.ViewModels" 
+             xmlns:models="clr-namespace:ListViewDemo.Models"
+             x:DataType="viewmodels:ProductListPageViewModel"
+             x:Class="ListViewDemo.Views.ProductListPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <ListView ItemsSource="{Binding Products}" HasUnevenRows="True">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="models:ProductModel">
+                        <ViewCell>
+                            <StackLayout>
+                                <Label Text="{Binding ProductName}" ></Label>
+                                <StackLayout  BindableLayout.ItemsSource="{Binding SubProducts}" >
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate x:DataType="models:SubProduct">
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="{Binding ProductName}" />
+                                                <Button  >
+                                                    <Button.Triggers>
+                                                        <DataTrigger TargetType="Button" Binding="{Binding IsSelected}" Value="True">
+                                                            <Setter Property="Text" Value="Selected" />
+                                                        </DataTrigger>
+                                                        <DataTrigger TargetType="Button" Binding="{Binding IsSelected}" Value="False">
+                                                            <Setter Property="Text" Value="Not Selected" />
+                                                        </DataTrigger>
+                                                    </Button.Triggers>
+                                                </Button>
+                                                <StackLayout.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type viewmodels:ProductListPageViewModel}},Path=SubItemSelectedCommand}" CommandParameter="{Binding .}" />
+                                                </StackLayout.GestureRecognizers>
+                                            </StackLayout>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>    
+                                </StackLayout>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
